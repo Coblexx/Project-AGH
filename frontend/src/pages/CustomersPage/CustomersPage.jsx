@@ -4,8 +4,34 @@ import { DataTable } from "./components/DataTable";
 import { Columns } from "./components/Columns";
 import { UserNav } from "./components/UserNav";
 import { navigationLinks } from "../../config/navigationLinks";
+import { useEffect, useState } from "react";
+import { data } from "autoprefixer";
+
+const customerListItems = function () {
+  const [customerData, setCustomerData] = useState([]);
+
+  const fetchData = () => {
+    fetch("http://localhost:8000/customers/")
+      .then((response) => response.json())
+      .then((jsonData) => {
+        const formatedData = jsonData.map((customer) => ({
+          id: customer.id,
+          fullname: `${customer.name} ${customer.surname}`,
+          email: customer.email,
+          phoneNumber: customer.phone_number,
+        }));
+        setCustomerData(formatedData);
+        console.log(formatedData);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => fetchData(), []);
+  return customerData;
+};
 
 export const CustomersPage = () => {
+  const customerData = customerListItems();
   return (
     <div className="hidden flex-col md:flex">
       <div className="border-b">
@@ -21,17 +47,7 @@ export const CustomersPage = () => {
           <h2 className="text-3xl font-bold tracking-tight">Customers</h2>
         </div>
         <div className="hidden h-full flex-1 flex-col space-y-8 md:flex">
-          <DataTable
-            data={[
-              {
-                id: 1,
-                fullname: "Test",
-                email: "test@example.com",
-                phoneNumber: "000-000-000",
-              },
-            ]}
-            columns={Columns}
-          />
+          <DataTable data={customerData} columns={Columns} />
         </div>
       </div>
     </div>

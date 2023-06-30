@@ -1,6 +1,7 @@
 from enum import Enum
 
 from pydantic import BaseModel
+from typing import Optional, Union
 
 class CustomerCreateSchema(BaseModel):
     name: str
@@ -14,22 +15,21 @@ class CustomerCreateSchema(BaseModel):
                 "name": "Jan",
                 "surname": "Kowalski",
                 "email": "jan.kowalski@example.com",
-                "phone_number": "000-000-000",
+                "phone_number": "000-000-000"
             }
         }
 
 
 class CustomerUpdateSchema(BaseModel):
-    name: str | None
-    surname: str | None
-    email: str | None
-    phone_number: str | None
+    name: Optional[Union[str, None]]
+    surname: Optional[Union[str, None]]
+    email: Optional[Union[str, None]]
+    phone_number: Optional[Union[str, None]]
 
     class Config:
         schema_extra = {
             "example": {
-                "name": "Jan",
-                "surname": "Kowalski"
+                "name": "Leszek"
             }
         }
 

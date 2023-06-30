@@ -31,7 +31,9 @@ export const Columns = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Fullname" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("fullname")}</div>,
+    cell: ({ row }) => (
+      <div className="w-[80px]">{row.getValue("fullname")}</div>
+    ),
     enableSorting: false,
     enableHiding: false,
   },
@@ -65,7 +67,7 @@ export const Columns = [
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id));
     },
-  },  
+  },
   {
     id: "actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,
