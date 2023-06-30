@@ -11,7 +11,7 @@ const customerListItems = function () {
   const [customerData, setCustomerData] = useState([]);
 
   const fetchData = () => {
-    fetch("http://localhost:8000/customers/")
+    fetch("http://localhost:8000/customers")
       .then((response) => response.json())
       .then((jsonData) => {
         const formatedData = jsonData.map((customer) => ({

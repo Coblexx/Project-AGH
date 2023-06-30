@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Query
 
 from .storage import get_customers_storage
 from .schema import CustomerCreateSchema, CustomerUpdateSchema, Customer
-
+import json
 router = APIRouter()
 
 CUSTOMERS_STORAGE = get_customers_storage()
