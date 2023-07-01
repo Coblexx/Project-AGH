@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from typing import Optional, Union
 
 class CustomerCreateSchema(BaseModel):
     name: str
@@ -19,10 +18,10 @@ class CustomerCreateSchema(BaseModel):
 
 
 class CustomerUpdateSchema(BaseModel):
-    name: Optional[Union[str, None]]
-    surname: Optional[Union[str, None]]
-    email: Optional[Union[str, None]]
-    phone_number: Optional[Union[str, None]]
+    name: str | None
+    surname: str | None
+    email: str | None
+    phone_number: str | None
 
     class Config:
         schema_extra = {
