@@ -6,7 +6,7 @@ router = APIRouter()
 
 PRODUCTS_STORAGE = get_products_storage()
 
-@router.post("/products")
+@router.post("/")
 async def create_product(product: ProductCreateSchema) -> Product:
     for existing_product in PRODUCTS_STORAGE.values():
         if existing_product.name == product.name:
