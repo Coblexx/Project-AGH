@@ -23,6 +23,7 @@ async def create_customer(customer: CustomerCreateSchema) -> Customer:
     customer_id = len(CUSTOMERS_STORAGE) + 1
     new_customer = Customer(**customer.dict(), id = customer_id)
     CUSTOMERS_STORAGE[customer_id] = new_customer
+    # dodać walidację klientów (pusty klient, cyfry w nazwie, invalid telefon)
     return new_customer
 
 
@@ -82,20 +83,7 @@ async def add_product_to_order(customer_id:int, order_id: int, product_id: int):
         return {"message": "Product added successfully to the order", "product_added": product}
     except KeyError:
         raise HTTPException(status_code=404, detail="Customer or order does not exist")
-    
-# @router.get("/{customer_id}/orders/{order_id}")
-# async def get_order_by_id(customer_id:int, order_id:int):
-#     order_list = ORDERS_STORAGE[customer_id]
 
-#     if order_list is None:
-#         raise HTTPException(status_code=404, detail="Customer not found")
-    
-#     order = order_list.get(order_id)
-
-#     if order is None:
-#         raise HTTPException(status_code=404, detail="Order not found")
-    
-#     return {"customer_id": customer_id, "order_id": order_id, "order": order}
 
 @router.get("/{customer_id}/orders/{order_id}")
 async def get_order(customer_id: int, order_id: int) -> dict:
@@ -103,5 +91,4 @@ async def get_order(customer_id: int, order_id: int) -> dict:
 
     for order in orders_list:
         if order["id"] == order_id:
-            # return {"customer_id": customer_id, "order_id": order_id, "order": order}
             return order
