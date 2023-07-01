@@ -38,8 +38,6 @@ export const AddCustomerForm = () => {
         });
       })
       .catch((err) => console.log(err));
-
-    console.log(formData);
   };
 
   return (
@@ -54,6 +52,8 @@ export const AddCustomerForm = () => {
             onChange={handleInput}
           />
         </label>
+        <br />
+        <br />
         <label>
           Surname:
           <input
@@ -63,6 +63,8 @@ export const AddCustomerForm = () => {
             onChange={handleInput}
           />
         </label>
+        <br />
+        <br />
         <label>
           Email:
           <input
@@ -72,6 +74,8 @@ export const AddCustomerForm = () => {
             onChange={handleInput}
           />
         </label>
+        <br />
+        <br />
         <label>
           Phone Number:
           <input
@@ -81,6 +85,8 @@ export const AddCustomerForm = () => {
             onChange={handleInput}
           />
         </label>
+        <br />
+        <br />
         <button type="submit" onSubmit={handleSubmit}>
           Submit
         </button>

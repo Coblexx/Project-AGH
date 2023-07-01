@@ -24,6 +24,10 @@ const router = createBrowserRouter([
         path: "add-customer",
         element: <AddCustomerPage />,
       },
+      // {
+      //   path: "products",
+      //   element: <ProductPage />,
+      // },
     ],
   },
 ]);

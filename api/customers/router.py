@@ -18,6 +18,7 @@ CUSTOMERS_STORAGE = get_customers_storage()
 ORDERS_STORAGE = get_orders_storage()
 PRODUCTS_STORAGE = storage.get_products_storage()
 
+
 @router.post("/add-customer")
 async def create_customer(customer: CustomerCreateSchema) -> Customer:
     customer_id = len(CUSTOMERS_STORAGE) + 1
@@ -31,6 +32,13 @@ async def create_customer(customer: CustomerCreateSchema) -> Customer:
 async def get_customers() -> list[Customer]:
     return list(get_customers_storage().values())
 
+# ORDER LIST
+
+@router.get("/orders-list")
+async def get_orders():
+    return ORDERS_STORAGE
+
+# dynamic parameters?????????????? czemu to nie działa | już wiem :D
 
 @router.get("/{customer_id}")
 async def get_customer(customer_id: int) -> Customer:
@@ -38,6 +46,10 @@ async def get_customer(customer_id: int) -> Customer:
         return CUSTOMERS_STORAGE[customer_id]
     except KeyError:
         raise HTTPException(status_code=404, detail=f"Customer with ID={customer_id} does not exist.")
+ 
+@router.get("/orders-list")
+async def get_orders():
+    return {"message": "1"}
 
 
 @router.patch("/{customer_id}")
@@ -66,7 +78,9 @@ async def add_customer_order(customer_id: int) -> None:
     new_order = {"id": order_id, "product_list": []}
     ORDERS_STORAGE.setdefault(customer_id, []).append(new_order)
     # dodać walidację klientów
+    # dodać order do głownego storage dla orderów (razem z id klienta)
     return ORDERS_STORAGE
+
 
 @router.patch("/{customer_id}/orders/{order_id}/add-products")
 async def add_product_to_order(customer_id:int, order_id: int, product_id: int):
@@ -86,7 +100,7 @@ async def add_product_to_order(customer_id:int, order_id: int, product_id: int):
 
 
 @router.get("/{customer_id}/orders/{order_id}")
-async def get_order(customer_id: int, order_id: int) -> dict:
+async def get_order_by_id(customer_id: int, order_id: int) -> dict:
     orders_list = ORDERS_STORAGE.get(customer_id)
 
     for order in orders_list:
