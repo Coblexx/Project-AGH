@@ -12,7 +12,6 @@ CUSTOMERS: CustomerStorageType = {}
 def get_customers_storage() -> CustomerStorageType:
     return CUSTOMERS
 
-
 @lru_cache()
 def get_orders_storage() -> OrderStorageType:
     return ORDERS_STORAGE

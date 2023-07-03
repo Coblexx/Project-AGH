@@ -1,5 +1,4 @@
 from functools import lru_cache
-
 from .schema import Product
 
 ProductStorageType = dict[int, Product]
