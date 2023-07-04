@@ -3,7 +3,7 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
 import { DataTableRowActions } from "./DataTableRowActions";
 
-export const Columns = [
+export const ProductColumns = [
   {
     id: "select",
     header: ({ table }) => (
@@ -29,41 +29,25 @@ export const Columns = [
   {
     accessorKey: "name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="name" />
+      <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => <div className="w-[80px]">{row.getValue("name")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: "email",
+    accessorKey: "price",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Email" />
+      <DataTableColumnHeader column={column} title="Price" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("email")}
+            {row.getValue("price")}
           </span>
         </div>
       );
-    },
-  },
-  {
-    accessorKey: "phoneNumber",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Phone number" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex w-[100px] items-center">
-          {row.getValue("phoneNumber")}
-        </div>
-      );
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
     },
   },
   {

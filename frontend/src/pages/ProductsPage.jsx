@@ -1,37 +1,38 @@
 import { MainNav } from "@/components/MainNav";
 
-import { DataTable } from "./components/DataTable";
-import { Columns } from "./components/Columns";
-import { UserNav } from "./components/UserNav";
-import { navigationLinks } from "../../config/navigationLinks";
+// import { DataTable } from "./CustomersPage/components/DataTable";
+import { ProductColumns } from "./CustomersPage/components/ProductColumns";
+import { UserNav } from "./CustomersPage/components/UserNav";
+import { navigationLinks } from "../config/navigationLinks";
 import { useEffect, useState } from "react";
 import { data } from "autoprefixer";
+import { TableProducts } from "./CustomersPage/components/TableProducts";
 
-const customerListItems = function () {
-  const [customerData, setCustomerData] = useState([]);
+const productsListItems = function () {
+  const [productsData, setproductsData] = useState([]);
 
   const fetchData = () => {
-    fetch("http://localhost:8000/customers")
+    fetch("http://localhost:8000/products")
       .then((response) => response.json())
       .then((jsonData) => {
-        const formatedData = jsonData.map((customer) => ({
-          id: customer.id,
-          name: `${customer.name} ${customer.surname}`,
-          email: customer.email,
-          phoneNumber: customer.phone_number,
+        console.log(typeof jsonData);
+        const formatedData = jsonData.map((product) => ({
+          id: product.id,
+          name: product.name,
+          price: product.price,
         }));
-        setCustomerData(formatedData);
+        setproductsData(formatedData);
         // console.log(formatedData);
       })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => fetchData(), []);
-  return customerData;
+  return productsData;
 };
 
-export const CustomersPage = () => {
-  const customerData = customerListItems();
+export const ProductsPage = () => {
+  const productsData = productsListItems();
   return (
     <div className="hidden flex-col md:flex">
       <div className="border-b">
@@ -44,10 +45,10 @@ export const CustomersPage = () => {
       </div>
       <div className="flex-1 space-y-4 p-8 pt-6">
         <div className="flex items-center justify-between space-y-2">
-          <h2 className="text-3xl font-bold tracking-tight">Customers</h2>
+          <h2 className="text-3xl font-bold tracking-tight">Products</h2>
         </div>
         <div className="hidden h-full flex-1 flex-col space-y-8 md:flex">
-          <DataTable data={customerData} columns={Columns} />
+          <TableProducts data={productsData} columns={ProductColumns} />
         </div>
       </div>
     </div>

@@ -2,8 +2,8 @@ from functools import lru_cache
 from .schema import Customer
 from typing import Dict, List
 
-OrderStorageType = Dict[int, List[Dict[str, int]]]
-ORDERS_STORAGE: OrderStorageType = {}
+OrderStorageType = List[Dict[int, list]]
+ORDERS_STORAGE: OrderStorageType = []
 
 CustomerStorageType = dict[int, Customer]
 CUSTOMERS: CustomerStorageType = {}

@@ -2,8 +2,7 @@ from fastapi import APIRouter, HTTPException
 from .storage import get_customers_storage, get_orders_storage
 from .schema import CustomerCreateSchema, CustomerUpdateSchema, Customer
 
-import os
-import sys
+import os, sys 
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sibling_dir = os.path.join(current_dir, '..', 'products')
@@ -24,13 +23,12 @@ async def create_customer(customer: CustomerCreateSchema) -> Customer:
     customer_id = len(CUSTOMERS_STORAGE) + 1
     new_customer = Customer(**customer.dict(), id = customer_id)
     CUSTOMERS_STORAGE[customer_id] = new_customer
-    # dodać walidację klientów (pusty klient, cyfry w nazwie, invalid telefon)
     return new_customer
 
 
 @router.get("/")
 async def get_customers() -> list[Customer]:
-    return list(get_customers_storage().values())
+    return list(CUSTOMERS_STORAGE.values())
 
 # ORDER LIST
 
@@ -38,18 +36,14 @@ async def get_customers() -> list[Customer]:
 async def get_orders():
     return ORDERS_STORAGE
 
-# dynamic parameters?????????????? czemu to nie działa | już wiem :D
 
+# dynamic parameters?????????????? czemu to nie działa | już wiem :D
 @router.get("/{customer_id}")
 async def get_customer(customer_id: int) -> Customer:
     try:
         return CUSTOMERS_STORAGE[customer_id]
     except KeyError:
         raise HTTPException(status_code=404, detail=f"Customer with ID={customer_id} does not exist.")
- 
-@router.get("/orders-list")
-async def get_orders():
-    return {"message": "1"}
 
 
 @router.patch("/{customer_id}")
@@ -73,19 +67,36 @@ async def delete_customer(customer_id: int) -> None:
 # ORDERS SECTION
 
 @router.post("/{customer_id}/orders")
-async def add_customer_order(customer_id: int) -> None:
-    order_id = len(ORDERS_STORAGE.get(customer_id, [])) + 1
-    new_order = {"id": order_id, "product_list": []}
-    ORDERS_STORAGE.setdefault(customer_id, []).append(new_order)
-    # dodać walidację klientów
-    # dodać order do głownego storage dla orderów (razem z id klienta)
-    return ORDERS_STORAGE
+async def create_order(customer_id: int):
+    if customer_id not in CUSTOMERS_STORAGE:
+        raise HTTPException(status_code=404, detail="Customer not found")
+    
+    order_id = len(ORDERS_STORAGE) + 1
+    customer_name = f"{CUSTOMERS_STORAGE[customer_id].name} {CUSTOMERS_STORAGE[customer_id].surname}"
+    product_list = []
+    
+    new_order = {
+        "order_id": order_id,
+        "customer_id": customer_id,
+        "customer_name": customer_name,
+        "product_list": product_list
+    }
+
+    ORDERS_STORAGE.append(new_order)
+    
+    return new_order
 
 
 @router.patch("/{customer_id}/orders/{order_id}/add-products")
-async def add_product_to_order(customer_id:int, order_id: int, product_id: int):
+async def add_product_to_order(customer_id: int, order_id: int, product_id: int):
     try:
-        order_list = ORDERS_STORAGE[customer_id]
+        order_list = [order for order in ORDERS_STORAGE if order["customer_id"] == customer_id]
+        if not order_list:
+            raise HTTPException(status_code=404, detail="Customer not found")
+
+        if order_id <= 0 or order_id > len(order_list):
+            raise HTTPException(status_code=404, detail="Order not found")
+
         order = order_list[order_id - 1]
 
         product = PRODUCTS_STORAGE.get(product_id)
@@ -101,8 +112,10 @@ async def add_product_to_order(customer_id:int, order_id: int, product_id: int):
 
 @router.get("/{customer_id}/orders/{order_id}")
 async def get_order_by_id(customer_id: int, order_id: int) -> dict:
-    orders_list = ORDERS_STORAGE.get(customer_id)
-
-    for order in orders_list:
-        if order["id"] == order_id:
+    order_list = [order for order in ORDERS_STORAGE if order.get("customer_id") == customer_id]
+    
+    for order in order_list:
+        if order["order_id"] == order_id:
             return order
+    
+    raise HTTPException(status_code=404, detail="Order not found")

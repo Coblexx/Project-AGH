@@ -3,7 +3,7 @@ import { Checkbox } from "@/components/ui/Checkbox";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
 import { DataTableRowActions } from "./DataTableRowActions";
 
-export const Columns = [
+export const ColumnsOrders = [
   {
     id: "select",
     header: ({ table }) => (
@@ -29,36 +29,36 @@ export const Columns = [
   {
     accessorKey: "name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="name" />
+      <DataTableColumnHeader column={column} title="Customer Name" />
     ),
     cell: ({ row }) => <div className="w-[80px]">{row.getValue("name")}</div>,
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: "email",
+    accessorKey: "order_id",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Email" />
+      <DataTableColumnHeader column={column} title="Order ID" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("email")}
+            {row.getValue("order_id")}
           </span>
         </div>
       );
     },
   },
   {
-    accessorKey: "phoneNumber",
+    accessorKey: "products_list",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Phone number" />
+      <DataTableColumnHeader column={column} title="List of products" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex w-[100px] items-center">
-          {row.getValue("phoneNumber")}
+          {row.getValue("products_list")}
         </div>
       );
     },
