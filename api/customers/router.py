@@ -20,7 +20,10 @@ PRODUCTS_STORAGE = storage.get_products_storage()
 
 @router.post("/add-customer")
 async def create_customer(customer: CustomerCreateSchema) -> Customer:
-    customer_id = len(CUSTOMERS_STORAGE) + 1
+    if CUSTOMERS_STORAGE:
+        customer_id = max(list(CUSTOMERS_STORAGE.keys()))+1
+    else:
+        customer_id = 1
     new_customer = Customer(**customer.dict(), id = customer_id)
     CUSTOMERS_STORAGE[customer_id] = new_customer
     return new_customer
@@ -71,7 +74,11 @@ async def create_order(customer_id: int):
     if customer_id not in CUSTOMERS_STORAGE:
         raise HTTPException(status_code=404, detail="Customer not found")
     
-    order_id = len(ORDERS_STORAGE) + 1
+    if ORDERS_STORAGE:
+        order_id = ORDERS_STORAGE[-1].order_id + 1
+    else:
+        order_id = 1
+    
     customer_name = f"{CUSTOMERS_STORAGE[customer_id].name} {CUSTOMERS_STORAGE[customer_id].surname}"
     product_list = []
     

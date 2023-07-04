@@ -12,7 +12,10 @@ async def create_product(product: ProductCreateSchema) -> Product:
         if existing_product.name == product.name:
             raise HTTPException(status_code=400, detail="Product already exists.")
     
-    product_id = len(PRODUCTS_STORAGE) + 1
+    if PRODUCTS_STORAGE:
+        product_id = max(list(PRODUCTS_STORAGE.keys())) + 1
+    else:
+        product_id = 1
     new_product = Product(**product.dict(), id=product_id)
     PRODUCTS_STORAGE[product_id] = new_product
 
